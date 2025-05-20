@@ -19,14 +19,18 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectPriority(modifier: Modifier = Modifier) {
+fun SelectPriority(
+    priority: Int = 1,
+    onPriorityChange: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     var expanded by remember { mutableStateOf(false) }
     val options = listOf(
         stringResource(R.string.ComboBoxLow),
         stringResource(R.string.ComboBoxMedium),
         stringResource(R.string.ComboBoxHigh)
     )
-    var selectedOption by remember { mutableStateOf(options[0]) }
+    var selectedOption by remember { mutableStateOf(options[priority-1]) }
 
     Text(
         text = stringResource(R.string.LabelPriority),
@@ -55,12 +59,13 @@ fun SelectPriority(modifier: Modifier = Modifier) {
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
-            options.forEach { selectionOption ->
+            options.forEachIndexed { index, selectionOption ->
                 DropdownMenuItem(
                     text = { Text(text = selectionOption) },
                     onClick = {
                         selectedOption = selectionOption
                         expanded = false
+                        onPriorityChange(index+1)
                     }
                 )
             }

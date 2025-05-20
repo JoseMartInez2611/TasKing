@@ -62,7 +62,7 @@ fun SeeTask(
             ) {
                 Text(text = stringResource(R.string.LabelComplete))
                 Switch(
-                    checked = true,
+                    checked = checked,
                     onCheckedChange = { /*TODO*/ }
                 )
             }
@@ -78,11 +78,14 @@ fun SeeTask(
         )
 
         SelectPriority(
-            modifier = Modifier
-                .fillMaxWidth()
+            priority = priority,
+            onPriorityChange = { /*TODO*/ }
         )
 
-        Description(description)
+        Description(
+            description,
+            onDescriptionChange = { /*TODO*/ },
+        )
 
         Row(
             modifier = Modifier

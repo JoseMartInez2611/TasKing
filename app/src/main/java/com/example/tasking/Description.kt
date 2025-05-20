@@ -17,18 +17,17 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Description(
     description: String,
+    onDescriptionChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var text  by remember { mutableStateOf(description) }
-
     Text(
         text = stringResource(R.string.LabelDescription),
         modifier = modifier.padding(vertical = 10.dp)
     )
 
     OutlinedTextField(
-        value = text,
-        onValueChange = {text = it},
+        value = description,
+        onValueChange = onDescriptionChange,
         placeholder = { Text(text= stringResource(R.string.PlaceholderDescription)) },
         maxLines = 20,
         singleLine = false,

@@ -1,12 +1,12 @@
 package com.example.tasking
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,15 +19,19 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TasKingTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    SeeTask(
-                        taskName = "Task Name",
-                        checked = true,
-                        priority = 1,
-                        description = "Task Description",
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize()
+                Surface(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CreateTaskDialog(
+                        showDialog = true,
+                        onDismissRequest = {},
+                        onSubmit = { title, description, priority ->
+                            Toast.makeText(
+                                this,
+                                "Task Created: $title, $description, Priority: $priority",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     )
                 }
             }
