@@ -6,6 +6,7 @@
     <string name="CreateButton">Create</string>
     <string name="CancelButton">Cancel</string>
     <string name="SaveButton">Save</string>
+    <string name="DeleteButton">Delete</string>
     <string name="LabelUserName">User name</string>
     <string name="LabelPassword">Password</string>
     <string name="LabelTitle">Title</string>
@@ -16,6 +17,7 @@
     <string name="ComboBoxMedium">Medium</string>
     <string name="ComboBoxHigh">High</string>
 
+    <string name="PlaceholderDescription">Enter here your description</string>
     <string name="Error_1">Please, fill all the fields</string>
 
 

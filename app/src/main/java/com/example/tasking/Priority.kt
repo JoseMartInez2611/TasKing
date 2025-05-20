@@ -14,17 +14,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectPriority(modifier: Modifier = Modifier) {
     var expanded by remember { mutableStateOf(false) }
-    val options = listOf("High", "Medium", "Low")
+    val options = listOf(
+        stringResource(R.string.ComboBoxLow),
+        stringResource(R.string.ComboBoxMedium),
+        stringResource(R.string.ComboBoxHigh)
+    )
     var selectedOption by remember { mutableStateOf(options[0]) }
 
     Text(
-        text = "Priority:",
+        text = stringResource(R.string.LabelPriority),
         modifier = Modifier.padding(vertical = 10.dp)
     )
 
