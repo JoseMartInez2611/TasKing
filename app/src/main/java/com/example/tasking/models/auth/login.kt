@@ -1,10 +1,7 @@
-package com.example.tasking
+package com.example.tasking.models.auth
 
 import android.content.Context
-import android.net.Uri
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,33 +34,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tasking.R
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tasking.utils.SessionManager
 
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
-
-    var name by remember {
-        mutableStateOf("")
-    }
-    var team by remember {
-        mutableStateOf("")
-    }
-    var selectedImageUri by remember {
-        mutableStateOf<Uri?>(null)
-    }
-    val imageSelectorLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = {
-            selectedImageUri = it
-        }
-    )
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = viewModel()
+) {
     val context = LocalContext.current
-    val teamFocusManager = remember { FocusRequester() }
-    Column (
+    val loginState by viewModel.loginState.collectAsState()
+
+    var userName by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    val passwordFocusRequester = remember { FocusRequester() }
+
+    Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
-
+    ) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = null,
@@ -71,41 +63,48 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 .padding(bottom = 16.dp)
         )
 
-
-        Spacer(
-            modifier = modifier
-        )
-
         Input(
             label = stringResource(R.string.LabelUserName),
-            value = name,
-            onValueChange = { name = it },
+            value = userName,
+            onValueChange = { userName = it },
             imeAction = ImeAction.Next,
-            onNext = {
-                teamFocusManager.requestFocus()
-            }
+            onNext = { passwordFocusRequester.requestFocus() }
         )
 
         Input(
             label = stringResource(R.string.LabelPassword),
-            value = team,
-            onValueChange = { team = it },
-            focusRequester = teamFocusManager,
+            value = password,
+            onValueChange = { password = it },
+            focusRequester = passwordFocusRequester
         )
 
         CustomButton(
             text = stringResource(R.string.LoginButton),
             onClick = {
-                if(name.isNotEmpty() && team.isNotEmpty()) {
-                    //onSave(name, team, selectedImageUri)
-                }
-                else {
+                if (userName.isNotEmpty() && password.isNotEmpty()) {
+                    viewModel.login(userName, password)
+                } else {
                     showToast(context, context.getString(R.string.Error_1))
                 }
             }
         )
+
+        when (val state=loginState) {
+            is LoginState.Success -> {
+                showToast(context, "Login exitoso")
+                SessionManager.saveToken(context, state.token)
+            }
+            is LoginState.Error -> {
+                showToast(context, (loginState as LoginState.Error).message)
+            }
+            LoginState.Loading -> {
+                Text("Iniciando sesión...")
+            }
+            LoginState.Idle -> { /* No hacer nada */ }
+        }
     }
 }
+
 
 fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
