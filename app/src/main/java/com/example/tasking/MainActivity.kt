@@ -20,9 +20,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             TasKingTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                    SeeTask(
+                        taskName = "Task Name",
+                        checked = true,
+                        priority = 1,
+                        description = "Task Description",
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize()
                     )
                 }
             }
