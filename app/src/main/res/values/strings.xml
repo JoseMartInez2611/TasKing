@@ -10,7 +10,7 @@
     <string name="LabelPassword">Password:</string>
     <string name="LabelTitle">Title:</string>
     <string name="LabelPriority">Priority:</string>
-    <string name="LabelDescription">Description:</string>
+    <string name="LabelDescription">Enter here your description:</string>
     <string name="LabelComplete">Complete:</string>
     <string name="ComboBoxLow">Low</string>
     <string name="ComboBoxMedium">Medium</string>
