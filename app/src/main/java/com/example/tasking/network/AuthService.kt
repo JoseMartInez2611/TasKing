@@ -1,7 +1,7 @@
 package com.example.tasking.network
 
-import com.example.tasking.data.LoginRequest
-import com.example.tasking.data.LoginResponse
+import com.example.tasking.data.login.LoginRequest
+import com.example.tasking.data.login.LoginResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.Response
