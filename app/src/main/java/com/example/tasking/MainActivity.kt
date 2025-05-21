@@ -12,7 +12,6 @@ import com.example.tasking.models.auth.LoginScreen
 import com.example.tasking.ui.theme.TasKingTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.tasking.models.home.HomeScreen
 
 class MainActivity : ComponentActivity() {
