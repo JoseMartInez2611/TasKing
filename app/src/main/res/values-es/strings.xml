@@ -6,16 +6,18 @@
     <string name="CreateButton">Crear</string>
     <string name="CancelButton">Cancelar</string>
     <string name="SaveButton">Guardar</string>
-    <string name="LabelUserName">Nombre Usuario:</string>
-    <string name="LabelPassword">Contraseña:</string>
-    <string name="LabelTitle">Titulo:</string>
-    <string name="LabelPriority">Prioridad:</string>
-    <string name="LabelDescription">Ingresa la descripcción:</string>
-    <string name="LabelComplete">Completada:</string>
+    <string name="DeleteButton">Borrar</string>
+    <string name="LabelUserName">Nombre Usuario</string>
+    <string name="LabelPassword">Contraseña</string>
+    <string name="LabelTitle">Titulo</string>
+    <string name="LabelPriority">Prioridad</string>
+    <string name="LabelDescription">Descripcción</string>
+    <string name="LabelComplete">Completada</string>
     <string name="ComboBoxLow">Bajo</string>
     <string name="ComboBoxMedium">Medio</string>
     <string name="ComboBoxHigh">Alto</string>
 
+    <string name="PlaceholderDescription">Escribe aquí la descripción</string>
     <string name="Error_1">Por favor, llenar todos los campos</string>
 
 </resources>

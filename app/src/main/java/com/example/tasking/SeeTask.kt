@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -53,15 +54,15 @@ fun SeeTask(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween // Distribuye extremos
         ) {
-            Text(text = "Title:")
+            Text(text = stringResource(R.string.LabelTitle))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text(text = "Completed:")
+                Text(text = stringResource(R.string.LabelComplete))
                 Switch(
-                    checked = true,
+                    checked = checked,
                     onCheckedChange = { /*TODO*/ }
                 )
             }
@@ -70,18 +71,21 @@ fun SeeTask(
         OutlinedTextField(
             value = taskName,
             onValueChange = { /*TODO*/ },
-            placeholder = {"Title"},
+            placeholder = { Text(text = stringResource(R.string.LabelTitle)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
 
         SelectPriority(
-            modifier = Modifier
-                .fillMaxWidth()
+            priority = priority,
+            onPriorityChange = { /*TODO*/ }
         )
 
-        Description(description)
+        Description(
+            description,
+            onDescriptionChange = { /*TODO*/ },
+        )
 
         Row(
             modifier = Modifier
@@ -98,7 +102,7 @@ fun SeeTask(
                     .height(50.dp)
 
             ) {
-                Text(text = "Save")
+                Text(text = stringResource(R.string.SaveButton))
             }
 
             OutlinedButton(
@@ -108,7 +112,7 @@ fun SeeTask(
                     .width(170.dp)
                     .height(50.dp)
             ) {
-                Text(text = "Delete")
+                Text(text = stringResource(R.string.DeleteButton))
             }
         }
 
@@ -120,7 +124,7 @@ fun SeeTask(
                 .padding(vertical = 10.dp)
                 .height(50.dp)
         ) {
-            Text(text = "Back")
+            Text(text = stringResource(R.string.BackButton))
         }
     }
 }

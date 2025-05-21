@@ -11,24 +11,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun Description(
     description: String,
+    onDescriptionChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var text  by remember { mutableStateOf(description) }
-
     Text(
-        text = "Description:",
+        text = stringResource(R.string.LabelDescription),
         modifier = modifier.padding(vertical = 10.dp)
     )
 
     OutlinedTextField(
-        value = text,
-        onValueChange = {text = it},
-        placeholder = { Text(text="Enter here your description") },
+        value = description,
+        onValueChange = onDescriptionChange,
+        placeholder = { Text(text= stringResource(R.string.PlaceholderDescription)) },
         maxLines = 20,
         singleLine = false,
         modifier = modifier
