@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
@@ -16,8 +19,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.tasking.R
 
@@ -28,7 +34,9 @@ fun SeeTask(
     priority: Int,
     description: String,
     modifier: Modifier = Modifier
-    ) {
+) {
+    val focusManager = LocalFocusManager.current
+
     Column (
         horizontalAlignment = Alignment.Start,
         modifier = modifier
@@ -38,15 +46,20 @@ fun SeeTask(
         Image(
             painter = painterResource(id = R.drawable.tasking_logo),
             contentDescription = null,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 50.dp)
         )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween // Distribuye extremos
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = stringResource(R.string.LabelTitle))
+            Text(
+                text = stringResource(R.string.LabelTitle),
+                modifier = Modifier.padding(vertical = 10.dp)
+            )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -64,9 +77,15 @@ fun SeeTask(
             value = taskName,
             onValueChange = { /*TODO*/ },
             placeholder = { Text(text = stringResource(R.string.LabelTitle)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp)
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
+            )
         )
 
         SelectPriority(
@@ -86,35 +105,35 @@ fun SeeTask(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween // Distribuye extremos
         ) {
-            OutlinedButton(
+            Button(
                 onClick = { /*TODO*/ },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .width(170.dp)
-                    .height(50.dp)
+                    .height(60.dp)
 
-            ) {
-                Text(text = stringResource(R.string.SaveButton))
-            }
-
-            OutlinedButton(
-                onClick = { /*TODO*/ },
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .width(170.dp)
-                    .height(50.dp)
             ) {
                 Text(text = stringResource(R.string.DeleteButton))
             }
+
+            Button(
+                onClick = { /*TODO*/ },
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier
+                    .width(170.dp)
+                    .height(60.dp)
+            ) {
+                Text(text = stringResource(R.string.SaveButton))
+            }
         }
 
-        OutlinedButton(
+        Button(
             onClick = { /*TODO*/ },
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
-                .height(50.dp)
+                .height(60.dp)
         ) {
             Text(text = stringResource(R.string.BackButton))
         }
