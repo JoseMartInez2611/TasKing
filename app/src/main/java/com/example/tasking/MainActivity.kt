@@ -7,8 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.example.tasking.models.auth.LoginScreen
 import com.example.tasking.ui.theme.TasKingTheme
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.tasking.models.home.HomeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,8 +21,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TasKingTheme {
-                Surface(modifier =Modifier.fillMaxSize()) {
-                    LoginScreen()
+                val navController = rememberNavController()
+
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = "login"
+                    ) {
+                        composable("login") {
+                            LoginScreen(navController = navController)
+                        }
+                        composable("home") {
+                            HomeScreen()
+                        }
+                    }
                 }
             }
         }

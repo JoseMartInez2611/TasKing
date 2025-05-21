@@ -1,4 +1,4 @@
-package com.example.tasking.data
+package com.example.tasking.data.login
 
 data class LoginRequest(
     val username: String,
