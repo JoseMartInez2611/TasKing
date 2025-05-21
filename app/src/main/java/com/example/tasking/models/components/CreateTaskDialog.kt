@@ -1,4 +1,4 @@
-package com.example.tasking
+package com.example.tasking.models.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.tasking.R
 
 @Composable
 fun CreateTaskDialog(
