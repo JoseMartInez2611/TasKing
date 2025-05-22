@@ -81,6 +81,7 @@ fun HomeScreen(
     var totalPages=1
     var context = LocalContext.current
 
+
     if(totalItems!=null){
         totalPages= ceil(totalItems / 5.0).toInt()
     }
@@ -190,7 +191,8 @@ fun HomeScreen(
                             )
                             refresh()
                             showToast(context, complete)
-                        }
+                        },
+                        refresh = {refresh()}
                     )
                 }
 
@@ -325,7 +327,8 @@ fun PaginatedTaskList(
     totalPages: Int,
     tasks: List<TaskGet>,
     onSeeTask:(TaskGet)->Unit,
-    onComplete: (TaskGet) -> Unit
+    onComplete: (TaskGet) -> Unit,
+    refresh: () -> Unit
 ) {
     val currentItems = tasks
 
@@ -342,7 +345,8 @@ fun PaginatedTaskList(
         Paginator(
             currentPage = currentPage,
             totalPages = totalPages,
-            onPageChange = onPageChange
+            onPageChange = onPageChange,
+            refresh = refresh
         )
     }
 }
@@ -351,7 +355,8 @@ fun PaginatedTaskList(
 fun Paginator(
     currentPage: Int,
     totalPages: Int,
-    onPageChange: (Int) -> Unit
+    onPageChange: (Int) -> Unit,
+    refresh:()->Unit
 ) {
     Row(
         modifier = Modifier
@@ -362,7 +367,10 @@ fun Paginator(
     ) {
         Button(
             onClick = {
-                if (currentPage > 1) onPageChange(currentPage - 1)
+                if (currentPage > 1) {
+                    refresh()
+                    onPageChange(currentPage - 1)
+                }
             },
             enabled = currentPage > 1,
             shape = RoundedCornerShape(8.dp),
@@ -382,7 +390,10 @@ fun Paginator(
 
         Button(
             onClick = {
-                if (currentPage < totalPages) onPageChange(currentPage + 1)
+                if (currentPage < totalPages) {
+                    refresh()
+                    onPageChange(currentPage + 1)
+                }
             },
             enabled = currentPage < totalPages,
             shape = RoundedCornerShape(8.dp),
