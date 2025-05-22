@@ -71,6 +71,12 @@ fun HomeScreen(
     }
 
     val allTasks = tasksState?.results ?: emptyList()
+    val totalItems=tasksState?.count
+    var totalPages=1
+
+    if(totalItems!=null){
+        totalPages=Math.ceil(totalItems/5.0).toInt()
+    }
 
     Scaffold(
         topBar = { topBar() },
@@ -78,7 +84,7 @@ fun HomeScreen(
 
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            PaginatedTaskList(tasks = allTasks, currentPage=currentPage, onPageChange = { newPage -> currentPage = newPage })
+            PaginatedTaskList(tasks = allTasks, currentPage=currentPage, onPageChange = { newPage -> currentPage = newPage }, totalPages)
         }
     }
 }
@@ -190,10 +196,9 @@ fun topBar(modifier: Modifier = Modifier){
 }
 
 @Composable
-fun PaginatedTaskList(tasks: List<TaskGet>, currentPage: Int, onPageChange: (Int) -> Unit ) {
+fun PaginatedTaskList(tasks: List<TaskGet>, currentPage: Int, onPageChange: (Int) -> Unit, totalPages: Int ) {
 
     val itemsPerPage = 5
-    val totalPages = (tasks.size + itemsPerPage - 1) / itemsPerPage
 
     val currentItems = tasks
         .drop(currentPage * itemsPerPage)
