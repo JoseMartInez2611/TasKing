@@ -4,8 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -120,7 +122,8 @@ fun SeeTask(
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .width(170.dp)
-                    .height(60.dp)
+                    .heightIn(min = 48.dp, max = 64.dp)
+                    .defaultMinSize(minHeight = 48.dp)
 
             ) {
                 Text(text = stringResource(R.string.DeleteButton))
@@ -134,7 +137,8 @@ fun SeeTask(
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .width(170.dp)
-                    .height(60.dp)
+                    .heightIn(min = 48.dp, max = 64.dp)
+                    .defaultMinSize(minHeight = 48.dp)
             ) {
                 Text(text = stringResource(R.string.SaveButton))
             }
@@ -146,7 +150,8 @@ fun SeeTask(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
-                .height(60.dp)
+                .heightIn(min = 48.dp, max = 64.dp)
+                .defaultMinSize(minHeight = 48.dp)
         ) {
             Text(text = stringResource(R.string.BackButton))
         }

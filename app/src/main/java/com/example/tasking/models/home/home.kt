@@ -4,6 +4,7 @@ import android.app.ActivityManager.TaskDescription
 import android.text.BoringLayout
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,12 +15,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +36,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -63,6 +69,10 @@ fun HomeScreen(
     var showDialog by remember { mutableStateOf(false) }
     var seeTask by remember { mutableStateOf(false) }
     var actualTask by remember { mutableStateOf<TaskGet?>(null) }
+    var complete = stringResource(R.string.MessageComplete)
+    var update =stringResource(R.string.MessageUpdate)
+    var create = stringResource(R.string.MessageCreate)
+    var delete = stringResource(R.string.MessageDelete)
 
     // Cada vez que cambie currentPage, consulta esa página
     LaunchedEffect(currentPage) {
@@ -86,7 +96,7 @@ fun HomeScreen(
             name, description, priority ->
             viewModel.createTask(name, description, priority)
             currentPage=1
-            showToast(context, "Nueva Tarea Creada")
+            showToast(context, create)
         }
     )
 
@@ -109,11 +119,11 @@ fun HomeScreen(
             onSaveClick = {
                 id,name,priority,description,completed ->
                 viewModel.updateTask(id,name,priority,description,completed)
-                showToast(context, "Tarea Actualizada")
+                showToast(context, update)
             },
             onDeleteClick = {
                 id->viewModel.delteTask(id)
-                showToast(context, "Taraea Eliminada")
+                showToast(context, delete)
             },
             onBackClick = { seeTask = false }
         )
@@ -123,7 +133,33 @@ fun HomeScreen(
             floatingActionButton = { FloatingButton(onClick = { showDialog = true }) }
 
         ) { innerPadding ->
+
             Column(modifier = Modifier.padding(innerPadding)) {
+                var searchQuery by remember { mutableStateOf("") }
+
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    placeholder = { Text(stringResource(R.string.LabelSearch)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    singleLine = true,
+                    leadingIcon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.search),
+                            contentDescription = null,
+                            colorFilter= ColorFilter.tint(MaterialTheme.colorScheme.secondaryContainer),
+                            modifier = Modifier.size(dimensionResource(R.dimen.image_size))
+                        )
+                    },
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            viewModel.getAll(search = searchQuery)
+                            currentPage=1
+                        }
+                    )
+                )
 
                 if (loading) {
                     LoadingScreen()
@@ -142,7 +178,7 @@ fun HomeScreen(
                                 id = task.id,
                                 completed = !task.completed
                             )
-                            showToast(context, "Tarea Completada")
+                            showToast(context, complete)
                         }
                     )
                 }
