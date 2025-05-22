@@ -14,9 +14,9 @@
     <string name="LabelDescription">Descripcción</string>
     <string name="LabelComplete">Completada</string>
     <string name="LabelSearch">Buscar</string>
-    <string name="ComboBoxLow">Bajo</string>
-    <string name="ComboBoxMedium">Medio</string>
-    <string name="ComboBoxHigh">Alto</string>
+    <string name="ComboBoxLow">Baja</string>
+    <string name="ComboBoxMedium">Media</string>
+    <string name="ComboBoxHigh">Alta</string>
 
     <string name="PlaceholderDescription">Escribe aquí la descripción</string>
     <string name="Error_1">Por favor, llenar todos los campos</string>

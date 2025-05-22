@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                             LoginScreen(navController = navController)
                         }
                         composable("home") {
-                            HomeScreen(navController = navController)
+                            HomeScreen()
                         }
                     }
                 }

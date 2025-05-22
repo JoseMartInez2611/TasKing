@@ -72,18 +72,15 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = painterResource(id = R.drawable.tasking_logo),
                 contentDescription = null,
                 modifier = modifier
-                    .size(120.dp)
-                    .padding(bottom = 16.dp)
+                    .size(400.dp)
             )
-
-            Text("Iniciar sesión", style = MaterialTheme.typography.headlineSmall)
 
             Spacer(modifier = Modifier.height(16.dp))
 

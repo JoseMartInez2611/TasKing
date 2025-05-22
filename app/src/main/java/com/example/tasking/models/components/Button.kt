@@ -1,5 +1,6 @@
 package com.example.tasking.models.components
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,9 +17,9 @@ import androidx.compose.ui.unit.sp
 fun CustomButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(8.dp),
         modifier = modifier
-            .width(220.dp)
+            .fillMaxWidth()
             .height(80.dp)
             .padding(10.dp)
     ) {

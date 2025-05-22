@@ -40,7 +40,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.tasking.R
 import com.example.tasking.data.task.TaskGet
 import com.example.tasking.models.auth.LoadingScreen
@@ -49,12 +48,12 @@ import com.example.tasking.models.components.FloatingButton
 import com.example.tasking.models.components.SeeTask
 import com.example.tasking.models.components.showToast
 import com.example.tasking.utils.ViewModelFactory
+import kotlin.math.ceil
 
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel=viewModel(factory = ViewModelFactory(LocalContext.current)),
-    navController: NavController,
 ) {
 
     val tasksState by viewModel.tasks.collectAsState()
@@ -68,7 +67,6 @@ fun HomeScreen(
     var create = stringResource(R.string.MessageCreate)
     var delete = stringResource(R.string.MessageDelete)
 
-    // Cada vez que cambie currentPage, consulta esa página
     LaunchedEffect(currentPage) {
         viewModel.getAll(page = currentPage)
 
@@ -80,7 +78,7 @@ fun HomeScreen(
     var context = LocalContext.current
 
     if(totalItems!=null){
-        totalPages=Math.ceil(totalItems/5.0).toInt()
+        totalPages= ceil(totalItems / 5.0).toInt()
     }
 
     CreateTaskDialog(
@@ -123,7 +121,7 @@ fun HomeScreen(
         )
     }else {
         Scaffold(
-            topBar = { topBar() },
+            topBar = { TopBar() },
             floatingActionButton = { FloatingButton(onClick = { showDialog = true }) }
 
         ) { innerPadding ->
@@ -135,6 +133,7 @@ fun HomeScreen(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
                     placeholder = { Text(stringResource(R.string.LabelSearch)) },
+                    shape = RoundedCornerShape(25.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
@@ -144,7 +143,9 @@ fun HomeScreen(
                             painter = painterResource(id = R.drawable.search),
                             contentDescription = null,
                             colorFilter= ColorFilter.tint(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier.size(dimensionResource(R.dimen.image_size))
+                            modifier = Modifier
+                                .size(dimensionResource(R.dimen.image_size))
+                                .padding(dimensionResource(R.dimen.padding_small))
                         )
                     },
                     keyboardActions = KeyboardActions(
@@ -183,7 +184,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun taskItem(
+fun TaskItem(
     task: TaskGet,
     onComplete: (TaskGet) -> Unit,
     seeTask: ()->Unit,
@@ -206,9 +207,9 @@ fun taskItem(
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
-            taskInformation(name, priority)
+            TaskInformation(name, priority)
             Spacer(modifier = Modifier.weight(1f))
-            taskAction(
+            TaskAction(
                 checked = task.completed,
                 onCheckedChange = { onComplete(task) },
                 seeTask = seeTask
@@ -218,18 +219,16 @@ fun taskItem(
 }
 
 @Composable
-fun taskAction(
+fun TaskAction(
     checked: Boolean,
     onCheckedChange: () -> Unit,
     seeTask: ()-> Unit,
     modifier: Modifier = Modifier,
-
 ){
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Image(
             painter = painterResource(id = R.drawable.view),
             contentDescription = null,
@@ -241,19 +240,16 @@ fun taskAction(
                     seeTask()
                 }
         )
-
         Checkbox(
             checked = checked,
             onCheckedChange = {onCheckedChange()}
         )
-
-
     }
 }
 
 
 @Composable
-fun taskInformation(
+fun TaskInformation(
     name:String,
     priority:String,
     modifier: Modifier = Modifier
@@ -265,7 +261,6 @@ fun taskInformation(
             fontSize = 20.sp,
             modifier = Modifier
                 .padding(top = dimensionResource(R.dimen.padding_small))
-
         )
         Text(
             text = priority,
@@ -280,7 +275,7 @@ fun taskInformation(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun topBar(modifier: Modifier = Modifier){
+fun TopBar(modifier: Modifier = Modifier){
     CenterAlignedTopAppBar(
         title = {
             Row(
@@ -310,14 +305,11 @@ fun PaginatedTaskList(
     onSeeTask:(TaskGet)->Unit,
     onComplete: (TaskGet) -> Unit
 ) {
-
-    val itemsPerPage = 5
-
     val currentItems = tasks
 
     Column {
         currentItems.forEach { task ->
-            taskItem(
+            TaskItem(
                 name = stringsCut(task.name),
                 priority = "${stringResource(R.string.LabelPriority)} ${getPriority(task.priority)}",
                 seeTask = {onSeeTask(task)},
@@ -351,13 +343,18 @@ fun Paginator(
                 if (currentPage > 1) onPageChange(currentPage - 1)
             },
             enabled = currentPage > 1,
+            shape = RoundedCornerShape(8.dp),
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
-            Text("<")
+            Text(
+                text = "<",
+                fontSize = 16.sp,
+                )
         }
 
         Text(
             text = "${currentPage}",
+            fontSize = 16.sp,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
 
@@ -366,9 +363,13 @@ fun Paginator(
                 if (currentPage < totalPages) onPageChange(currentPage + 1)
             },
             enabled = currentPage < totalPages,
+            shape = RoundedCornerShape(8.dp),
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
-            Text(">")
+            Text(
+                text = ">",
+                fontSize = 16.sp,
+            )
         }
     }
 }

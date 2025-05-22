@@ -24,14 +24,14 @@ fun FloatingButton(modifier: Modifier = Modifier, onClick: () -> Unit){
         elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp),
         containerColor = MaterialTheme.colorScheme.inversePrimary,
         modifier=modifier
-            .size(56.dp)
+            .size(65.dp)
     ) {
         Image(
             contentScale = ContentScale.Crop,
             painter = painterResource(id= R.drawable.add),
             contentDescription = null,
             modifier = modifier
-                .size(350.dp)
+                .size(700.dp)
                 .padding(20.dp)
                 .clip(MaterialTheme.shapes.small)
         )

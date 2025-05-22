@@ -45,7 +45,7 @@ fun Input(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(8.dp),
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = imeAction
@@ -66,7 +66,7 @@ fun Input(
             modifier = modifier
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally)
-                .padding(horizontal = 25.dp)
+                .padding(horizontal = 15.dp)
                 .padding(bottom = 25.dp)
                 .then(
                     if (focusRequester != null) {
