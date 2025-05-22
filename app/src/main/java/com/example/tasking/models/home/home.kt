@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -38,6 +39,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -70,7 +72,7 @@ fun HomeScreen(
     var create = stringResource(R.string.MessageCreate)
     var delete = stringResource(R.string.MessageDelete)
 
-    LaunchedEffect(currentPage, refreshTrigger) {
+    LaunchedEffect(refreshTrigger) {
         viewModel.getAll(page = currentPage)
     }
 
@@ -84,12 +86,8 @@ fun HomeScreen(
     }
 
     fun refresh() {
-        if (currentPage == 1){
-            refreshTrigger++
-        }
-        else {
-            currentPage = 1
-        }
+        refreshTrigger++
+        currentPage = 1
     }
 
     CreateTaskDialog(
@@ -162,10 +160,13 @@ fun HomeScreen(
                                 .padding(dimensionResource(R.dimen.padding_small))
                         )
                     },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Search
+                    ),
                     keyboardActions = KeyboardActions(
-                        onDone = {
+                        onSearch = {
+                            currentPage = 1
                             viewModel.getAll(search = searchQuery)
-                            refresh()
                         }
                     )
                 )
