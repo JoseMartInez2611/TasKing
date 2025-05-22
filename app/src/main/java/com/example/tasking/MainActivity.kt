@@ -21,7 +21,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             TasKingTheme {
                 val navController = rememberNavController()
-
                 Surface(modifier = Modifier.fillMaxSize()) {
                     NavHost(
                         navController = navController,

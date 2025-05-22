@@ -237,6 +237,7 @@ fun TaskAction(
         Image(
             painter = painterResource(id = R.drawable.view),
             contentDescription = null,
+            colorFilter= ColorFilter.tint(MaterialTheme.colorScheme.secondaryContainer),
             modifier = modifier
                 .size(dimensionResource(R.dimen.image_size))
                 .padding(dimensionResource(R.dimen.padding_small))

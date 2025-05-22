@@ -22,7 +22,6 @@ fun FloatingButton(modifier: Modifier = Modifier, onClick: () -> Unit){
         onClick = onClick,
         shape = CircleShape,
         elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 4.dp),
-        containerColor = MaterialTheme.colorScheme.inversePrimary,
         modifier=modifier
             .size(65.dp)
     ) {
