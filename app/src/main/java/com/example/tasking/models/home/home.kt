@@ -32,7 +32,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -69,7 +71,6 @@ fun HomeScreen(
 
     LaunchedEffect(currentPage) {
         viewModel.getAll(page = currentPage)
-
     }
 
     val allTasks = tasksState?.results ?: emptyList()
@@ -192,10 +193,14 @@ fun TaskItem(
     priority: String,
     modifier: Modifier = Modifier
 ) {
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+    val verticalPadding = if (screenHeight < 600.dp) 8.dp else 16.dp
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(verticalPadding)
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.inverseSurface,

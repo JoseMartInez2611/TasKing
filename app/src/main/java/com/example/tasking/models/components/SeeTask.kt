@@ -60,7 +60,7 @@ fun SeeTask(
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 50.dp)
+                .padding(top = verticalPadding*3)
         )
 
         Row(
@@ -125,7 +125,6 @@ fun SeeTask(
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .width(170.dp)
-                    .wrapContentHeight()
             ) {
                 Text(
                     text = stringResource(R.string.DeleteButton),
@@ -142,7 +141,6 @@ fun SeeTask(
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .width(170.dp)
-                    .wrapContentHeight()
             ) {
                 Text(
                     text = stringResource(R.string.SaveButton),
@@ -157,8 +155,6 @@ fun SeeTask(
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = verticalPadding)
-                .wrapContentHeight()
         ) {
             Text(
                 text = stringResource(R.string.BackButton),
