@@ -125,8 +125,8 @@ fun SeeTask(
                             onDeleteClick(id)
                             onBackClick()
                           },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
                     .width(170.dp)
             ) {
@@ -142,7 +142,8 @@ fun SeeTask(
                             onSaveClick(id, taskName, priority, description, checked)
                             onBackClick()
                          },
-                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
                     .width(170.dp)
             ) {
@@ -156,7 +157,7 @@ fun SeeTask(
 
         Button(
             onClick = onBackClick,
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
         ) {

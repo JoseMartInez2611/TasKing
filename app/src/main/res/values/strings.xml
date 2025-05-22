@@ -7,11 +7,11 @@
     <string name="CancelButton">Cancel</string>
     <string name="SaveButton">Save</string>
     <string name="DeleteButton">Delete</string>
-    <string name="LabelUserName">User name</string>
-    <string name="LabelPassword">Password</string>
-    <string name="LabelTitle">Title</string>
-    <string name="LabelPriority">Priority</string>
-    <string name="LabelDescription">Description</string>
+    <string name="LabelUserName">Username:</string>
+    <string name="LabelPassword">Password:</string>
+    <string name="LabelTitle">Title:</string>
+    <string name="LabelPriority">Priority:</string>
+    <string name="LabelDescription">Description:</string>
     <string name="LabelComplete">Complete</string>
     <string name="LabelSearch">Search</string>
     <string name="ComboBoxLow">Low</string>

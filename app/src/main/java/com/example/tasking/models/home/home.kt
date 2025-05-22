@@ -49,6 +49,7 @@ import com.example.tasking.models.components.CreateTaskDialog
 import com.example.tasking.models.components.FloatingButton
 import com.example.tasking.models.components.SeeTask
 import com.example.tasking.models.components.showToast
+import com.example.tasking.ui.theme.SegoeUI
 import com.example.tasking.utils.ViewModelFactory
 import kotlin.math.ceil
 
@@ -270,6 +271,7 @@ fun TaskInformation(
         )
         Text(
             text = priority,
+            fontFamily = SegoeUI,
             fontWeight = FontWeight.Normal,
             fontSize = 15.sp
         )
