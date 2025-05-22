@@ -1,6 +1,7 @@
 package com.example.tasking.network
 
 import android.content.Context
+import android.util.Log
 import com.example.tasking.utils.SessionManager
 import com.example.tasking.utils.AuthInterceptor
 import okhttp3.Interceptor
@@ -30,6 +31,7 @@ object RetrofitClient {
             token?.let {
                 requestBuilder.addHeader("Authorization", "Token $it")
             }
+            Log.d("Request", "${chain.request()}")
             chain.proceed(requestBuilder.build())
         }
         val client = OkHttpClient.Builder()

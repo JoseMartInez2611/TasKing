@@ -3,6 +3,7 @@ package com.example.tasking.network
 import com.example.tasking.data.task.Task
 import com.example.tasking.data.task.TaskCompleted
 import com.example.tasking.data.task.TaskCreate
+import com.example.tasking.data.task.TaskEdit
 import com.example.tasking.data.task.TaskGet
 import com.example.tasking.data.task.TaskGetAll
 import retrofit2.Response
@@ -34,7 +35,7 @@ interface HomeService {
     suspend fun completeTask(@Path("id") id: Int, @Body taskCompleted: TaskCompleted): Response<TaskGet>
 
     @PATCH("tasks/{id}/")
-    suspend fun updateTask(@Path("id") id: Int, @Body taskEdit: TaskCreate): Response<TaskGet>
+    suspend fun updateTask(@Path("id") id: Int, @Body taskEdit: TaskEdit): Response<TaskGet>
 
     @DELETE("tasks/{id}/")
     suspend fun deleteTask(@Path("id") id: Int): Response<Unit>

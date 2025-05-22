@@ -13,6 +13,7 @@ import com.example.tasking.models.auth.LoginScreen
 import com.example.tasking.ui.theme.TasKingTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.tasking.models.components.SeeTask
 import com.example.tasking.models.home.HomeScreen
 import com.example.tasking.models.home.HomeViewModel
 

@@ -28,10 +28,18 @@ import com.example.tasking.R
 
 @Composable
 fun SeeTask(
+    id:Int,
     taskName: String,
+    onTaskNameChange: (String) -> Unit,
     checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
     priority: Int,
+    onPriorityChange: (Int) -> Unit,
     description: String,
+    onDescriptionChange: (String) -> Unit,
+    onSaveClick: (Int, String, Int, String, Boolean) -> Unit,
+    onDeleteClick: (Int) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
@@ -67,14 +75,14 @@ fun SeeTask(
                 Text(text = stringResource(R.string.LabelComplete))
                 Switch(
                     checked = checked,
-                    onCheckedChange = { /*TODO*/ }
+                    onCheckedChange = onCheckedChange
                 )
             }
         }
 
         OutlinedTextField(
             value = taskName,
-            onValueChange = { /*TODO*/ },
+            onValueChange = onTaskNameChange,
             placeholder = { Text(text = stringResource(R.string.LabelTitle)) },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -89,12 +97,12 @@ fun SeeTask(
 
         SelectPriority(
             priority = priority,
-            onPriorityChange = { /*TODO*/ }
+            onPriorityChange = onPriorityChange
         )
 
         Description(
             description,
-            onDescriptionChange = { /*TODO*/ },
+            onDescriptionChange = onDescriptionChange,
         )
 
         Row(
@@ -105,7 +113,10 @@ fun SeeTask(
             horizontalArrangement = Arrangement.SpaceBetween // Distribuye extremos
         ) {
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                            onDeleteClick(id)
+                            onBackClick()
+                          },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .width(170.dp)
@@ -116,7 +127,10 @@ fun SeeTask(
             }
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick ={
+                            onSaveClick(id, taskName, priority, description, checked)
+                            onBackClick()
+                         },
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .width(170.dp)
@@ -127,7 +141,7 @@ fun SeeTask(
         }
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = onBackClick,
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .fillMaxWidth()

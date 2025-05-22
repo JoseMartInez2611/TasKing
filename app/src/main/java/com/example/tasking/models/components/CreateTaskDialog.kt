@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -33,8 +34,10 @@ fun CreateTaskDialog(
     if(showDialog) {
         var title by remember { mutableStateOf("") }
         var description by remember { mutableStateOf("") }
-        var priority by remember { mutableStateOf(0) }
+        var priority by remember { mutableStateOf(1) }
         val focusRequester = remember { FocusRequester() }
+        val context = LocalContext.current
+        val text = stringResource(R.string.Error_1)
 
         AlertDialog(
             onDismissRequest = onDismissRequest,
@@ -73,8 +76,12 @@ fun CreateTaskDialog(
             confirmButton = {
                 Button(
                     onClick = {
-                        onSubmit(title, description, priority)
-                        onDismissRequest()
+                        if(title.isBlank() || description.isBlank()){
+                            showToast(context, text)
+                        }else {
+                            onSubmit(title, description, priority)
+                            onDismissRequest()
+                        }
                     },
                     shape = RoundedCornerShape(8.dp),
 

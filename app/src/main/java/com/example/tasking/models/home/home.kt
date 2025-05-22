@@ -1,23 +1,18 @@
 package com.example.tasking.models.home
 
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
+import android.app.ActivityManager.TaskDescription
+import android.text.BoringLayout
+import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -25,7 +20,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,21 +32,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.tasking.R
 import com.example.tasking.data.task.TaskGet
-import com.example.tasking.ui.theme.TasKingTheme
+import com.example.tasking.models.auth.LoadingScreen
+import com.example.tasking.models.components.CreateTaskDialog
+import com.example.tasking.models.components.FloatingButton
+import com.example.tasking.models.components.SeeTask
+import com.example.tasking.models.components.showToast
 import com.example.tasking.utils.ViewModelFactory
 
 
@@ -63,34 +58,105 @@ fun HomeScreen(
 ) {
 
     val tasksState by viewModel.tasks.collectAsState()
+    val loading by viewModel.loading.collectAsState()
     var currentPage by remember { mutableStateOf(1) }
+    var showDialog by remember { mutableStateOf(false) }
+    var seeTask by remember { mutableStateOf(false) }
+    var actualTask by remember { mutableStateOf<TaskGet?>(null) }
 
     // Cada vez que cambie currentPage, consulta esa página
     LaunchedEffect(currentPage) {
         viewModel.getAll(page = currentPage)
+
     }
 
     val allTasks = tasksState?.results ?: emptyList()
     val totalItems=tasksState?.count
     var totalPages=1
+    var context = LocalContext.current
 
     if(totalItems!=null){
         totalPages=Math.ceil(totalItems/5.0).toInt()
     }
 
-    Scaffold(
-        topBar = { topBar() },
-        floatingActionButton={}
+    CreateTaskDialog(
+        showDialog=showDialog,
+        onDismissRequest = {showDialog=false},
+        onSubmit = {
+            name, description, priority ->
+            viewModel.createTask(name, description, priority)
+            currentPage=1
+            showToast(context, "Nueva Tarea Creada")
+        }
+    )
 
-    ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            PaginatedTaskList(tasks = allTasks, currentPage=currentPage, onPageChange = { newPage -> currentPage = newPage }, totalPages)
+    if (seeTask && actualTask != null) {
+        var taskName by remember { mutableStateOf(actualTask!!.name) }
+        var description by remember { mutableStateOf(actualTask!!.description ?: "") }
+        var checked by remember { mutableStateOf(actualTask!!.completed) }
+        var priority by remember { mutableStateOf(actualTask!!.priority) }
+
+        SeeTask(
+            id=actualTask!!.id,
+            taskName = taskName,
+            onTaskNameChange = { taskName = it },
+            checked = checked,
+            onCheckedChange = { checked = it },
+            priority = priority,
+            onPriorityChange = { priority = it },
+            description = description,
+            onDescriptionChange = { description = it },
+            onSaveClick = {
+                id,name,priority,description,completed ->
+                viewModel.updateTask(id,name,priority,description,completed)
+                showToast(context, "Tarea Actualizada")
+            },
+            onDeleteClick = {
+                id->viewModel.delteTask(id)
+                showToast(context, "Taraea Eliminada")
+            },
+            onBackClick = { seeTask = false }
+        )
+    }else {
+        Scaffold(
+            topBar = { topBar() },
+            floatingActionButton = { FloatingButton(onClick = { showDialog = true }) }
+
+        ) { innerPadding ->
+            Column(modifier = Modifier.padding(innerPadding)) {
+
+                if (loading) {
+                    LoadingScreen()
+                } else {
+                    PaginatedTaskList(
+                        tasks = allTasks,
+                        currentPage = currentPage,
+                        onPageChange = { newPage -> currentPage = newPage },
+                        totalPages= totalPages,
+                        onSeeTask = { task ->
+                            actualTask = task
+                            seeTask = true
+                        },
+                        onComplete = { task ->
+                            viewModel.completeTask(
+                                id = task.id,
+                                completed = !task.completed
+                            )
+                            showToast(context, "Tarea Completada")
+                        }
+                    )
+                }
+
+            }
         }
     }
 }
 
 @Composable
 fun taskItem(
+    task: TaskGet,
+    onComplete: (TaskGet) -> Unit,
+    seeTask: ()->Unit,
     name: String,
     priority: String,
     modifier: Modifier = Modifier
@@ -112,15 +178,23 @@ fun taskItem(
         ) {
             taskInformation(name, priority)
             Spacer(modifier = Modifier.weight(1f))
-            taskAction()
+            taskAction(
+                checked = task.completed,
+                onCheckedChange = { onComplete(task) },
+                seeTask = seeTask
+            )
         }
     }
 }
 
 @Composable
-fun taskAction(modifier: Modifier = Modifier){
-    var checked by remember { mutableStateOf(false) }
+fun taskAction(
+    checked: Boolean,
+    onCheckedChange: () -> Unit,
+    seeTask: ()-> Unit,
+    modifier: Modifier = Modifier,
 
+){
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
@@ -133,12 +207,14 @@ fun taskAction(modifier: Modifier = Modifier){
                 .size(dimensionResource(R.dimen.image_size))
                 .padding(dimensionResource(R.dimen.padding_small))
                 .clip(MaterialTheme.shapes.small)
-                .clickable {  }
+                .clickable {
+                    seeTask()
+                }
         )
 
         Checkbox(
             checked = checked,
-            onCheckedChange = { checked = it }
+            onCheckedChange = {onCheckedChange()}
         )
 
 
@@ -182,7 +258,7 @@ fun topBar(modifier: Modifier = Modifier){
             ) {
                 Image(
                     modifier = Modifier
-                        .size(200.dp),
+                        .size(220.dp),
                     painter = painterResource(R.drawable.tasking_logo),
 
                     contentDescription = null
@@ -196,17 +272,28 @@ fun topBar(modifier: Modifier = Modifier){
 }
 
 @Composable
-fun PaginatedTaskList(tasks: List<TaskGet>, currentPage: Int, onPageChange: (Int) -> Unit, totalPages: Int ) {
+fun PaginatedTaskList(
+    currentPage: Int,
+    onPageChange: (Int) -> Unit,
+    totalPages: Int,
+    tasks: List<TaskGet>,
+    onSeeTask:(TaskGet)->Unit,
+    onComplete: (TaskGet) -> Unit
+) {
 
     val itemsPerPage = 5
 
     val currentItems = tasks
-        .drop(currentPage * itemsPerPage)
-        .take(itemsPerPage)
 
     Column {
         currentItems.forEach { task ->
-            taskItem(name = task.name, priority = task.priority.toString())
+            taskItem(
+                name = stringsCut(task.name),
+                priority = "${stringResource(R.string.LabelPriority)} ${getPriority(task.priority)}",
+                seeTask = {onSeeTask(task)},
+                onComplete =  onComplete,
+                task = task
+            )
         }
         Paginator(
             currentPage = currentPage,
@@ -231,27 +318,48 @@ fun Paginator(
     ) {
         Button(
             onClick = {
-                if (currentPage > 0) onPageChange(currentPage - 1)
+                if (currentPage > 1) onPageChange(currentPage - 1)
             },
-            enabled = currentPage > 0,
+            enabled = currentPage > 1,
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
             Text("<")
         }
 
         Text(
-            text = "${currentPage + 1}",
+            text = "${currentPage}",
             modifier = Modifier.padding(horizontal = 8.dp)
         )
 
         Button(
             onClick = {
-                if (currentPage < totalPages - 1) onPageChange(currentPage + 1)
+                if (currentPage < totalPages) onPageChange(currentPage + 1)
             },
-            enabled = currentPage < totalPages - 1,
+            enabled = currentPage < totalPages,
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
             Text(">")
         }
+    }
+}
+
+fun stringsCut(value:String):String{
+
+    if(value.length>20){
+        return value.substring(0, 18)+"..."
+    }else{
+
+        return value
+    }
+
+}
+
+@Composable
+fun getPriority(value: Int):String{
+    when(value)
+    {
+        1 -> return  stringResource(R.string.ComboBoxLow)
+        2 -> return stringResource(R.string.ComboBoxMedium)
+        else -> return stringResource(R.string.ComboBoxHigh)
     }
 }

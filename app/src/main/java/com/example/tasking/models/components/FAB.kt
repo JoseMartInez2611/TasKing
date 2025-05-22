@@ -31,7 +31,7 @@ fun FloatingButton(modifier: Modifier = Modifier, onClick: () -> Unit){
             painter = painterResource(id= R.drawable.add),
             contentDescription = null,
             modifier = modifier
-                .size(42.dp)
+                .size(300.dp)
                 .padding(20.dp)
                 .clip(MaterialTheme.shapes.small)
         )
