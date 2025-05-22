@@ -1,6 +1,5 @@
 package com.example.tasking.network
 
-import com.example.tasking.data.task.Task
 import com.example.tasking.data.task.TaskCompleted
 import com.example.tasking.data.task.TaskCreate
 import com.example.tasking.data.task.TaskEdit

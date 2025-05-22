@@ -1,17 +1,12 @@
 package com.example.tasking.repository
 
 import android.content.Context
-import com.example.tasking.data.login.LoginRequest
-import com.example.tasking.data.login.LoginResponse
-import com.example.tasking.data.task.Task
 import com.example.tasking.data.task.TaskCompleted
 import com.example.tasking.data.task.TaskCreate
 import com.example.tasking.data.task.TaskEdit
 import com.example.tasking.data.task.TaskGet
 import com.example.tasking.data.task.TaskGetAll
-import com.example.tasking.network.HomeService
 import com.example.tasking.network.RetrofitClient
-import com.example.tasking.utils.SessionManager
 import retrofit2.Response
 
 class HomeRepository (

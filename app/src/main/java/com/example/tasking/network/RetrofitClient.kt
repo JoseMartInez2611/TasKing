@@ -3,12 +3,10 @@ package com.example.tasking.network
 import android.content.Context
 import android.util.Log
 import com.example.tasking.utils.SessionManager
-import com.example.tasking.utils.AuthInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 
 object RetrofitClient {

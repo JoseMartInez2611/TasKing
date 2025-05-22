@@ -1,15 +1,9 @@
 package com.example.tasking.models.home
 
 import android.content.Context
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tasking.data.task.Task
 import com.example.tasking.data.task.TaskGetAll
-import com.example.tasking.models.auth.LoginState
-import com.example.tasking.models.components.showToast
-import com.example.tasking.repository.AuthRepository
 import com.example.tasking.repository.HomeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
