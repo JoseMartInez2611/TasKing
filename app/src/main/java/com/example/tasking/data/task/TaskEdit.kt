@@ -1,7 +1,6 @@
 package com.example.tasking.data.task
 
-data class TaskUpdateAndGet (
-    val id: Int,
+data class TaskEdit (
     val name: String,
     var description: String,
     var priority: Int,

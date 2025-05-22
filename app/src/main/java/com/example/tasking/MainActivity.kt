@@ -7,12 +7,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import com.example.tasking.models.auth.LoginScreen
 import com.example.tasking.ui.theme.TasKingTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tasking.models.home.HomeScreen
+import com.example.tasking.models.home.HomeViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +33,7 @@ class MainActivity : ComponentActivity() {
                             LoginScreen(navController = navController)
                         }
                         composable("home") {
-                            HomeScreen()
+                            HomeScreen(navController = navController)
                         }
                     }
                 }
