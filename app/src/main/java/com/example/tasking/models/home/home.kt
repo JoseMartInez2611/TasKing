@@ -34,7 +34,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,9 +43,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tasking.R
 import com.example.tasking.data.task.TaskGet
-import com.example.tasking.models.auth.LoadingScreen
 import com.example.tasking.models.components.CreateTaskDialog
 import com.example.tasking.models.components.FloatingButton
+import com.example.tasking.models.components.LoadingScreen
 import com.example.tasking.models.components.SeeTask
 import com.example.tasking.models.components.showToast
 import com.example.tasking.ui.theme.SegoeUI
@@ -59,6 +58,7 @@ fun HomeScreen(
     viewModel: HomeViewModel=viewModel(factory = ViewModelFactory(LocalContext.current)),
 ) {
 
+    var refreshTrigger by remember { mutableStateOf(0) }
     val tasksState by viewModel.tasks.collectAsState()
     val loading by viewModel.loading.collectAsState()
     var currentPage by remember { mutableStateOf(1) }
@@ -70,7 +70,7 @@ fun HomeScreen(
     var create = stringResource(R.string.MessageCreate)
     var delete = stringResource(R.string.MessageDelete)
 
-    LaunchedEffect(currentPage) {
+    LaunchedEffect(currentPage, refreshTrigger) {
         viewModel.getAll(page = currentPage)
     }
 
@@ -83,20 +83,29 @@ fun HomeScreen(
         totalPages= ceil(totalItems / 5.0).toInt()
     }
 
+    fun refresh() {
+        if (currentPage == 1){
+            refreshTrigger++
+        }
+        else {
+            currentPage = 1
+        }
+    }
+
     CreateTaskDialog(
         showDialog=showDialog,
         onDismissRequest = {showDialog=false},
         onSubmit = {
             name, description, priority ->
             viewModel.createTask(name, description, priority)
-            currentPage=1
+            refresh()
             showToast(context, create)
         }
     )
 
     if (seeTask && actualTask != null) {
         var taskName by remember { mutableStateOf(actualTask!!.name) }
-        var description by remember { mutableStateOf(actualTask!!.description ?: "") }
+        var description by remember { mutableStateOf(actualTask!!.description) }
         var checked by remember { mutableStateOf(actualTask!!.completed) }
         var priority by remember { mutableStateOf(actualTask!!.priority) }
 
@@ -119,7 +128,10 @@ fun HomeScreen(
                 id->viewModel.delteTask(id)
                 showToast(context, delete)
             },
-            onBackClick = { seeTask = false }
+            onBackClick = {
+                refresh()
+                seeTask = false
+            }
         )
     }else {
         Scaffold(
@@ -153,7 +165,7 @@ fun HomeScreen(
                     keyboardActions = KeyboardActions(
                         onDone = {
                             viewModel.getAll(search = searchQuery)
-                            currentPage=1
+                            refresh()
                         }
                     )
                 )
@@ -175,6 +187,7 @@ fun HomeScreen(
                                 id = task.id,
                                 completed = !task.completed
                             )
+                            refresh()
                             showToast(context, complete)
                         }
                     )
@@ -361,7 +374,7 @@ fun Paginator(
         }
 
         Text(
-            text = "${currentPage}",
+            text = "$currentPage",
             fontSize = 16.sp,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
